@@ -4,6 +4,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Articles</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000000;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        h1, h2 {
+            color: #9ebf95;
+            text-align: center;
+        }
+
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        form input, form textarea, form button {
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        form button {
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        form button:hover {
+            background-color: #4cae4c;
+        }
+
+        /* استایل لیست مقالات */
+        .articles {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .article {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+
+        .article h3 {
+            color: #333;
+        }
+
+        .article p {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .article:last-child {
+            border-bottom: none;
+        }
+    </style>
 </head>
 <body>
     <h1>Upload a New Article</h1>
@@ -12,14 +87,18 @@
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit">Submit Article</button>  
-    </form>
-    </div>  
+        </form>
+    </div>
 
     <h2>List of Articles</h2>
-    {% for article in articles %}
-        <h3>{{ article.title }}</h3>
-        <p>{{ article.content }}</p>
-        <p>Published on: {{ article.published_date }}</p>
-    {% endfor %}
+    <div class="articles">
+        {% for article in articles %}
+            <div class="article">
+                <h3>{{ article.title }}</h3>
+                <p>{{ article.content }}</p>
+                <p>Published on: {{ article.published_date }}</p>
+            </div>
+        {% endfor %}
+    </div>
 </body>
 </html>
