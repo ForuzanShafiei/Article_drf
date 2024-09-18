@@ -1,27 +1,27 @@
 from django.shortcuts import render, redirect
-
-from articles.forms.article_form import ArticleForm
+from django.views import View
+from articles.forms import ArticleForm
 from articles.models import Article
 
+class ArticleView(View):
+    form_class = ArticleForm
+    template_name = 'articles.html'
 
-def article_view(request):
-    if request.method == 'GET':
-        form = ArticleForm()
+    def get(self, request, *args, **kwargs):
+        # نمایش فرم خالی و لیست مقالات
+        form = self.form_class()
         articles = Article.objects.all()
         context = {'form': form, 'articles': articles}
-        return render(request, 'articles.html', context)
+        return render(request, self.template_name, context)
 
-    if request.method == 'POST':
-        form = ArticleForm(request.POST)
-        if form.is_valid():
-            clean_data = form.cleaned_data
-            article = Article.objects.create(
-                title=clean_data['title'],
-                content=clean_data['content'],
-                published_date=clean_data['published_date'],
-            )
-            article.save()
-            context = {
-                'form': form
-            }
-            return redirect('article-view')
+    def post(self, request, *args, **kwargs):
+        # دریافت داده‌های فرم با متد POST
+        form = self.form_class(request.POST)
+        if form.is_valid():  # اعتبارسنجی فرم
+            form.save()  # ذخیره فرم در دیتابیس
+            return redirect('article-view')  # پس از ذخیره موفق، بازگشت به صفحه اصلی
+        else:
+            # اگر فرم نامعتبر بود، دوباره فرم و لیست مقالات را نمایش می‌دهیم
+            articles = Article.objects.all()
+            context = {'form': form, 'articles': articles}
+            return render(request, self.template_name, context)

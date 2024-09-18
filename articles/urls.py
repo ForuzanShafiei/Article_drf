@@ -1,6 +1,6 @@
 from django.urls import path
-from articles.views import article_view
+from articles.views import ArticleView
 
 urlpatterns = [
-    path('', article_view, name='article-view'),
+    path('', ArticleView.as_view(), name='article-view'),  # فراخوانی متد as_view() برای ویوی کلاس‌بنیاد
 ]
