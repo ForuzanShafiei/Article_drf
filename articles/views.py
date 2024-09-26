@@ -1,24 +1,7 @@
-from django.shortcuts import render, redirect
-from django.views import View
-from articles.forms import ArticleForm
+from rest_framework import viewsets
 from articles.models import Article
+from articles.serializers import ArticleSerializer
 
-class ArticleView(View):
-    form_class = ArticleForm
-    template_name = 'articles.html'
-
-    def get(self, request, *args, **kwargs):
-        form = self.form_class()
-        articles = Article.objects.all()
-        context = {'form': form, 'articles': articles}
-        return render(request, self.template_name, context)
-
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('article-view')
-        else:
-            articles = Article.objects.all()
-            context = {'form': form, 'articles': articles}
-            return render(request, self.template_name, context)
+class ArticleViewSet(viewsets.ModelViewSet):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
